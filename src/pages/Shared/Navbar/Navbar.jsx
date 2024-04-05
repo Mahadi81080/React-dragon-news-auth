@@ -1,7 +1,19 @@
 import { Link } from "react-router-dom";
-import user from '../../../assets/user.png'
+import userImg from "../../../assets/user.png";
+import { useContext } from "react";
+import { AuthContext } from "../../../Providers/AuthProvider";
 
 const Navbar = () => {
+  const { user,logOut } = useContext(AuthContext);
+  const handleSingOut =()=>{
+    logOut()
+    .then(result=>{
+      console.log(result.user);
+    })
+    .catch(error=>{
+      console.error(error);
+    })
+  }
   const link = (
     <>
       <li>
@@ -40,20 +52,24 @@ const Navbar = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
-             {link}
+              {link}
             </ul>
           </div>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-          {
-            link
-          }
-          </ul>
+          <ul className="menu menu-horizontal px-1">{link}</ul>
         </div>
         <div className="navbar-end">
-            <img className="w-10 h-10 mr-4" src={user} alt="" />
-          <Link className="bg-black text-white py-2 px-7">Login</Link>
+          <img className="w-10 h-10 mr-4" src={userImg} alt="" />
+          {user ? (
+            <Link onClick={handleSingOut} to="/login" className="bg-black text-white py-2 px-7">
+              Sing Out
+            </Link>
+          ) : (
+            <Link to="/login" className="bg-black text-white py-2 px-7">
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </div>
